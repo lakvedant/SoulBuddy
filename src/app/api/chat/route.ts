@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 const CONFIG = {
   flowId: '59e5d967-c9a5-451f-846d-e7860c6ceca6',
   langflowId: '488d9a81-1c00-4c14-a50f-e429f0de2267',
-  applicationToken: process.env.LANGFLOW_API_TOKEN,
+  applicationToken: 'AstraCS:JkzCDyXZZYiuzgfBUoHNHjXU:3a842622241e5707fe475bcb6937d2419515f052be536e794e48270c48d6aa8c',
   baseURL: 'https://api.langflow.astra.datastax.com'
 }
 
