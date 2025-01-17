@@ -1,3 +1,6 @@
+'use client';
+
+import Link from "next/link";
 import { ModeToggle } from "../../ui/mode-toggle";
 import {
   Footer,
@@ -7,7 +10,7 @@ import {
 } from "../../ui/footer";
 import LaunchUI from "../../logos/launch-ui";
 
-export default function FooterSection() {
+const FooterSection: React.FC = () => {
   return (
     <footer className="w-full bg-background px-4">
       <div className="mx-auto max-w-container">
@@ -21,67 +24,43 @@ export default function FooterSection() {
             </FooterColumn>
             <FooterColumn>
               <h3 className="text-md pt-1 font-semibold">Product</h3>
-              <a
-                href="/"
-                className="text-sm text-muted-foreground"
-              >
+              <Link href="/" className="text-sm text-muted-foreground">
                 Changelog
-              </a>
-              <a
-                href="/"
-                className="text-sm text-muted-foreground"
-              >
+              </Link>
+              <Link href="/" className="text-sm text-muted-foreground">
                 Documentation
-              </a>
+              </Link>
             </FooterColumn>
             <FooterColumn>
               <h3 className="text-md pt-1 font-semibold">Company</h3>
-              <a
-                href="/"
-                className="text-sm text-muted-foreground"
-              >
+              <Link href="/" className="text-sm text-muted-foreground">
                 About
-              </a>
-              <a
-                href="/"
-                className="text-sm text-muted-foreground"
-              >
+              </Link>
+              <Link href="/" className="text-sm text-muted-foreground">
                 Careers
-              </a>
-              <a
-                href="/"
-                className="text-sm text-muted-foreground"
-              >
+              </Link>
+              <Link href="/" className="text-sm text-muted-foreground">
                 Blog
-              </a>
+              </Link>
             </FooterColumn>
             <FooterColumn>
               <h3 className="text-md pt-1 font-semibold">Contact</h3>
-              <a
-                href="/"
-                className="text-sm text-muted-foreground"
-              >
+              <Link href="/" className="text-sm text-muted-foreground">
                 Discord
-              </a>
-              <a
-                href="/"
-                className="text-sm text-muted-foreground"
-              >
+              </Link>
+              <Link href="/" className="text-sm text-muted-foreground">
                 Twitter
-              </a>
-              <a
-                href="/"
-                className="text-sm text-muted-foreground"
-              >
+              </Link>
+              <Link href="/" className="text-sm text-muted-foreground">
                 Github
-              </a>
+              </Link>
             </FooterColumn>
           </FooterContent>
           <FooterBottom>
             <div>© 2024 Mikołaj Dobrucki. All rights reserved</div>
             <div className="flex items-center gap-4">
-              <a href="/">Privacy Policy</a>
-              <a href="/">Terms of Service</a>
+              <Link href="/">Privacy Policy</Link>
+              <Link href="/">Terms of Service</Link>
               <ModeToggle />
             </div>
           </FooterBottom>
@@ -89,4 +68,6 @@ export default function FooterSection() {
       </div>
     </footer>
   );
-}
+};
+
+export default FooterSection;
