@@ -57,7 +57,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="w-full flex justify-center py-4 px-6 fixed">
+    <nav className="w-full flex justify-center py-4 px-6 fixed z-50">
       <div className="w-fit flex items-center border border-white bg-black/10 backdrop-blur-sm rounded px-6 py-2">
         {/* Logo Section */}
         <div className="flex items-center mr-8">
