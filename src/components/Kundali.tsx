@@ -1,67 +1,56 @@
-// import React, { useState, useEffect } from 'react';
+'use client';
 
-// const VedicAstroChart = ({ userId }) => {
-//   const [userData, setUserData] = useState(null);
-//   const [chartImageSvg, setChartImageSvg] = useState('');
+import { useEffect, useState } from 'react';
 
-//   useEffect(() => {
-//     const fetchUserData = async () => {
-//       try {
-//         const response = await fetch(`/api/users?userId=${userId}`);
-//         const data = await response.json();
-//         setUserData(data);
-//       } catch (error) {
-//         console.error('Error fetching user data:', error);
-//       }
-//     };
+export default function Kundali() {
+  const [chartData, setChartData] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-//     fetchUserData();
-//   }, [userId]);
+  // Simulated user ID for demo purposes
+  const userId = 'XbLNaC5O4WfnuCjmtv1GxkMlaoj2'; // Replace this with dynamic user authentication logic if needed.
 
-//   useEffect(() => {
-//     const fetchChartImage = async () => {
-//       if (userData) {
-//         const { date_of_birth, latitude, longitude, timezone } = userData;
-//         const [dob, tob] = date_of_birth.split('T')[0].split('-');
+  useEffect(() => {
+    const fetchChartData = async () => {
+      try {
+        const res = await fetch(`/api/getChart?userId=${userId}`);
 
-//         const params = {
-//           lang: 'en',
-//           api_key: process.env.NEXT_PUBLIC_VEDIC_ASTRO_API_KEY,
-//           lat: latitude,
-//           lon: longitude, 
-//           tz: timezone,
-//           div: 'D3',
-//           style: 'north',
-//           color: '#9d00ff',
-//           dob: `${dob[1]}/${dob[2]}/${dob[0]}`,
-//           tob: tob.slice(0, 5),
-//         };
+        // Check if the response is JSON before parsing
+        const contentType = res.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new Error('Unexpected response format');
+        }
 
-//         const queryString = new URLSearchParams(params).toString();
-//         const url = `https://api.vedicastroapi.com/v3-json/horoscope/chart-image?${queryString}`;
+        const data = await res.json();
 
-//         try {
-//           const response = await fetch(url);
-//           const data = await response.text();
-//           setChartImageSvg(data);
-//         } catch (error) {
-//           console.error('Error fetching chart image:', error);
-//         }
-//       }
-//     };
+        if (res.ok) {
+          setChartData(data.chartData);
+        } else {
+          setError(data.error || 'Failed to fetch kundali chart');
+        }
+      } catch (err) {
+        console.error('Fetch error:', err);
+        setError('An error occurred while fetching the kundali chart.');
+      }
+    };
 
-//     fetchChartImage();
-//   }, [userData]);
+    fetchChartData();
+  }, [userId]);
 
-//   return (
-//     <div className="w-full h-96 flex justify-center items-center">
-//       {chartImageSvg ? (
-//         <div dangerouslySetInnerHTML={{ __html: chartImageSvg }} />
-//       ) : (
-//         <p>Loading chart...</p>
-//       )}
-//     </div>
-//   );
-// };
+  if (error) {
+    return <div className="text-red-500">{error}</div>;
+  }
 
-// export default VedicAstroChart;
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <h1 className="text-2xl font-bold mb-4">Vedic Astrology Chart</h1>
+      {chartData ? (
+        <div
+          dangerouslySetInnerHTML={{ __html: chartData }} // Safely render the SVG
+          className="border border-gray-300 p-4 rounded bg-white shadow-md"
+        />
+      ) : (
+        <div>Loading...</div>
+      )}
+    </div>
+  );
+}
