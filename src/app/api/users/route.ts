@@ -8,12 +8,14 @@ export async function POST(request: Request) {
 
     console.log('Astra DB Endpoint:', astraEndpoint);
 
+    // Include date_of_birth in requestBody
     const requestBody = {
       user_id: userData.user_id,
       email: userData.email,
       username: userData.username,
       full_name: userData.full_name,
       photo_url: userData.photo_url || null,
+      date_of_birth: userData.date_of_birth || null,
       created_at: new Date().toISOString()
     };
 
@@ -73,11 +75,20 @@ export async function GET(request: Request) {
         username: null,
         full_name: null,
         photo_url: null,
+        date_of_birth: null
       });
     }
 
     const data = await response.json();
-    return NextResponse.json(data);
+    
+    // Add logging to see what data we're getting
+    console.log('Data from Astra DB:', data);
+
+    // Make sure we're returning date_of_birth in the response
+    return NextResponse.json({
+      ...data,
+      date_of_birth: data.date_of_birth || null
+    });
   } catch (error: any) {
     console.error('Error fetching user:', error);
     return NextResponse.json(

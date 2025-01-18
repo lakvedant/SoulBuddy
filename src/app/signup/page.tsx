@@ -14,7 +14,8 @@ const SignUp: React.FC = () => {
     name: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    dateOfBirth: ""
   });
 
   useEffect(() => {
@@ -44,6 +45,7 @@ const SignUp: React.FC = () => {
     email: string;
     username: string;
     full_name: string;
+    date_of_birth?: string;
     photo_url?: string;
   }) => {
     try {
@@ -99,9 +101,10 @@ const SignUp: React.FC = () => {
         email: formData.email,
         username: username,
         full_name: formData.name,
+        date_of_birth: formData.dateOfBirth
       });
 
-      router.push("/dashboard");
+      router.push("/additional-details");
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -122,10 +125,11 @@ const SignUp: React.FC = () => {
         email: user.email!,
         username: username,
         full_name: user.displayName || username,
-        photo_url: user.photoURL || undefined
+        photo_url: user.photoURL || undefined,
+        date_of_birth: '' // For Google sign-in, we'll collect this in additional details
       });
 
-      router.push("/dashboard");
+      router.push("/additional-details");
     } catch (err: any) {
       setError(err.message);
     }
