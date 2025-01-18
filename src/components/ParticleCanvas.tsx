@@ -183,7 +183,7 @@ export default function ParticleCanvas() {
   }, [])
 
   return (
-    <div className="relative w-full h-full font-sans overflow-hidden">
+    <div className="relative w-full h-full font-sans position-absolute overflow-hidden">
       <canvas
         ref={canvasRef}
         className="absolute inset-0 h-full w-full"

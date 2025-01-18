@@ -2,6 +2,7 @@
 import Navbar from "@/components/Navbar";
 import Chatbot from "@/components/Chatbot";
 import ParticleCanvas from "@/components/ParticleCanvas";
+import HorizontalScroll from "@/components/HorizontalScroll";
 
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
         <Navbar/>
       <ParticleCanvas />
     </main>
+      <HorizontalScroll/>
       
     </>
   );
