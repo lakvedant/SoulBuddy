@@ -125,15 +125,23 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       >
         {/* <!-- SIDEBAR HEADER --> */}
         <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-          <Link href="/">
-            <Image
-              width={176}
-              height={32}
-              src={"/images/logo/logo.svg"}
-              alt="Logo"
-              priority
-            />
-          </Link>
+        <Link 
+    href="/" 
+    style={{ 
+      color: 'white', 
+      display: 'flex', 
+      alignItems: 'center', 
+      gap: '8px' // Add gap for better spacing
+    }}
+  >
+    <Image 
+      src="/images/logo/logo.png" 
+      alt="Logo" 
+      width={70} 
+      height={72} 
+    />
+    SoulBuddy
+  </Link>
 
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
