@@ -39,7 +39,7 @@ export default function ParticleCanvas() {
 
     const initParticles = () => {
       const particles: Particle[] = []
-      const numParticles = Math.floor((canvas.width * canvas.height) / 12000) // Adjusted particle count
+      const numParticles = Math.floor((canvas.width * canvas.height) / 12000)
 
       for (let i = 0; i < numParticles; i++) {
         const angle = Math.random() * Math.PI * 2
@@ -67,10 +67,9 @@ export default function ParticleCanvas() {
     }
 
     const animate = () => {
-      // Set gradient background
       const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
-      gradient.addColorStop(0, '#1a1a40') // Purple
-      gradient.addColorStop(1, '#000000') // Black
+      gradient.addColorStop(0, '#1a1a40')
+      gradient.addColorStop(1, '#000000')
       ctx.fillStyle = gradient
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
@@ -90,7 +89,6 @@ export default function ParticleCanvas() {
         if (particle.isFollowing) {
           const idealDistance = 250
           const distanceDiff = distance - idealDistance
-
           particle.vx = (dx / distance) * distanceDiff * 0.05
           particle.vy = (dy / distance) * distanceDiff * 0.05
         } else {
@@ -150,6 +148,17 @@ export default function ParticleCanvas() {
         ref={canvasRef}
         className="absolute inset-0 h-full w-full"
       />
+      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
+        <h1 className="text-6xl text-white font-bold mb-4">
+        Unveil Your{' '}
+          <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+          Cosmic Blueprint
+          </span>
+        </h1>
+        <p className="text-xl text-gray-300 max-w-2xl">
+        with AI-Powered Spiritual Insights
+        </p>
+      </div>
     </div>
   )
 }
