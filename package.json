@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.0.20",
+    "@astrajs/collections": "^0.3.4",
+    "@astrajs/rest": "^0.3.4",
+    "@clerk/nextjs": "^6.9.14",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.4.0",
@@ -18,10 +21,12 @@
     "@radix-ui/react-slot": "^1.1.1",
     "ai": "^4.0.39",
     "bcryptjs": "^2.4.3",
+    "cassandra-driver": "^4.7.2",
     "class-variance-authority": "^0.7.1",
+    "firebase": "^11.2.0",
     "flatpickr": "^4.6.13",
     "framer-motion": "^11.18.0",
-    "jsvectormap": "^1.6.0",
+    "jsvectormap": "^1.5.3",
     "lucide-react": "^0.471.1",
     "mongodb": "^6.12.0",
     "mongoose": "^8.9.5",
@@ -36,13 +41,15 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/bcryptjs": "^2.4.6",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/cassandra-driver": "^4.1.1",
+    "@types/long": "^5.0.0",
+    "@types/node": "^20.17.14",
+    "@types/react": "^19.0.7",
+    "@types/react-dom": "^19.0.3",
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
     "postcss": "^8",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5"
+    "typescript": "^5.7.3"
   }
 }
