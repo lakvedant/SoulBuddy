@@ -11,7 +11,6 @@ export default function Home() {
       <main className="relative w-full h-screen overflow-hidden">
         <Navbar/>
       <ParticleCanvas />
-      <Chatbot/>
     </main>
       
     </>

@@ -1,6 +1,8 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Star, Menu, X } from 'lucide-react'
 
 interface Particle {
   x: number
@@ -10,6 +12,8 @@ interface Particle {
   isFollowing: boolean
   baseVx: number
   baseVy: number
+  color: string
+  size: number
 }
 
 export default function ParticleCanvas() {
@@ -17,6 +21,14 @@ export default function ParticleCanvas() {
   const mouseRef = useRef({ x: 0, y: 0 })
   const particlesRef = useRef<Particle[]>([])
   const animationFrameRef = useRef<number>(0)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [showContent, setShowContent] = useState(false)
+
+  useEffect(() => {
+    // Show content after a brief delay
+    const timer = setTimeout(() => setShowContent(true), 500)
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -37,6 +49,11 @@ export default function ParticleCanvas() {
       window.addEventListener('resize', resizeCanvas)
     }
 
+    const getRandomColor = () => {
+      const colors = ['#8B5CF6', '#6D28D9', '#4C1D95', '#7C3AED']
+      return colors[Math.floor(Math.random() * colors.length)]
+    }
+
     const initParticles = () => {
       const particles: Particle[] = []
       const numParticles = Math.floor((canvas.width * canvas.height) / 12000)
@@ -51,7 +68,9 @@ export default function ParticleCanvas() {
           vy: 0,
           isFollowing: false,
           baseVx: Math.cos(angle) * speed,
-          baseVy: Math.sin(angle) * speed
+          baseVy: Math.sin(angle) * speed,
+          color: getRandomColor(),
+          size: 1 + Math.random()
         })
       }
       particlesRef.current = particles
@@ -62,8 +81,29 @@ export default function ParticleCanvas() {
       mouseRef.current = { x: e.clientX, y: e.clientY }
     }
 
+    const handleClick = (e: MouseEvent) => {
+      // Create burst effect
+      const burstParticles = 20
+      for (let i = 0; i < burstParticles; i++) {
+        const angle = (i / burstParticles) * Math.PI * 2
+        const speed = 2 + Math.random() * 2
+        particlesRef.current.push({
+          x: e.clientX,
+          y: e.clientY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          isFollowing: false,
+          baseVx: Math.cos(angle) * speed,
+          baseVy: Math.sin(angle) * speed,
+          color: getRandomColor(),
+          size: 2 + Math.random()
+        })
+      }
+    }
+
     if (typeof window !== 'undefined') {
       window.addEventListener('mousemove', handleMouseMove)
+      window.addEventListener('click', handleClick)
     }
 
     const animate = () => {
@@ -72,8 +112,6 @@ export default function ParticleCanvas() {
       gradient.addColorStop(1, '#000000')
       ctx.fillStyle = gradient
       ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
 
       particlesRef.current.forEach((particle, i) => {
         const dx = mouseRef.current.x - particle.x
@@ -105,7 +143,8 @@ export default function ParticleCanvas() {
         if (particle.y > canvas.height) particle.y = 0
 
         ctx.beginPath()
-        ctx.arc(particle.x, particle.y, 1.2, 0, Math.PI * 2)
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+        ctx.fillStyle = particle.color
         ctx.fill()
 
         particlesRef.current.forEach((p2, j) => {
@@ -120,7 +159,7 @@ export default function ParticleCanvas() {
               ctx.beginPath()
               ctx.moveTo(particle.x, particle.y)
               ctx.lineTo(p2.x, p2.y)
-              ctx.strokeStyle = `rgba(255, 255, 255, ${0.2 * (1 - distance2 / 100)})`
+              ctx.strokeStyle = `rgba(139, 92, 246, ${0.2 * (1 - distance2 / 100)})`
               ctx.stroke()
             }
           }
@@ -135,6 +174,7 @@ export default function ParticleCanvas() {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', resizeCanvas)
         window.removeEventListener('mousemove', handleMouseMove)
+        window.removeEventListener('click', handleClick)
       }
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
@@ -143,22 +183,56 @@ export default function ParticleCanvas() {
   }, [])
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full font-sans overflow-hidden">
       <canvas
         ref={canvasRef}
         className="absolute inset-0 h-full w-full"
       />
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
-        <h1 className="text-6xl text-white font-bold mb-4">
-        Unveil Your{' '}
-          <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-          Cosmic Blueprint
-          </span>
-        </h1>
-        <p className="text-xl text-gray-300 max-w-2xl">
-        with AI-Powered Spiritual Insights
-        </p>
-      </div>
+      {showContent && (
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <h1 className="text-6xl md:text-7xl text-white font-extrabold tracking-tight mb-6">
+              Unveil Your{' '}
+              <span className="bg-gradient-to-r from-purple-300 via-purple-400 to-purple-500 bg-clip-text text-transparent">
+                Cosmic Blueprint
+              </span>
+            </h1>
+          </motion.div>
+          
+          <motion.p 
+            className="text-xl md:text-2xl text-gray-300 max-w-2xl font-bold leading-relaxed mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            with AI-Powered Spiritual Insights
+          </motion.p>
+
+          <motion.p
+            className="text-lg font-bold text-purple-300 mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+          >
+            Join 10,000+ spiritual seekers on their journey
+          </motion.p>
+          
+          <motion.div
+            className="space-y-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            <button className="px-8 py-4 bg-purple-600 text-white  rounded-lg text-lg font-medium transition-all hover:bg-purple-700 hover:scale-105">
+              Start Your Journey
+            </button>
+          </motion.div>
+        </div>
+      )}
     </div>
   )
 }
