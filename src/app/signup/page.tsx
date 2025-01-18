@@ -15,7 +15,8 @@ const SignUp: React.FC = () => {
     name: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    dateOfBirth: ""
   });
 
   const saveUserToDatabase = async (userData: {
@@ -23,6 +24,7 @@ const SignUp: React.FC = () => {
     email: string;
     username: string;
     full_name: string;
+    date_of_birth?: string;
     photo_url?: string;
   }) => {
     try {
@@ -65,6 +67,13 @@ const SignUp: React.FC = () => {
       return;
     }
 
+    // Validate date of birth
+    if (!formData.dateOfBirth) {
+      setError("Date of birth is required");
+      setLoading(false);
+      return;
+    }
+
     try {
       // Create Firebase user
       const userCredential = await createUserWithEmailAndPassword(
@@ -82,9 +91,10 @@ const SignUp: React.FC = () => {
         email: formData.email,
         username: username,
         full_name: formData.name,
+        date_of_birth: formData.dateOfBirth
       });
 
-      router.push("/dashboard");
+      router.push("/additional-details");
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -107,10 +117,11 @@ const SignUp: React.FC = () => {
         email: user.email!,
         username: username,
         full_name: user.displayName || username,
-        photo_url: user.photoURL || undefined
+        photo_url: user.photoURL || undefined,
+        date_of_birth: '' // For Google sign-in, we'll collect this in additional details
       });
 
-      router.push("/dashboard");
+      router.push("/additional-details");
     } catch (err: any) {
       setError(err.message);
     }
@@ -151,7 +162,7 @@ const SignUp: React.FC = () => {
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                {/* Your SVG code here */}
+                {/* Your SVG code */}
               </svg>
             </span>
           </div>
@@ -183,6 +194,7 @@ const SignUp: React.FC = () => {
                     value={formData.name}
                     onChange={handleChange}
                     className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    required
                   />
                   <span className="absolute right-4 top-4">
                     <svg
@@ -210,6 +222,22 @@ const SignUp: React.FC = () => {
 
               <div className="mb-4">
                 <label className="mb-2.5 block font-medium text-black dark:text-white">
+                  Date of Birth
+                </label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    name="dateOfBirth"
+                    value={formData.dateOfBirth}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <label className="mb-2.5 block font-medium text-black dark:text-white">
                   Email
                 </label>
                 <div className="relative">
@@ -220,6 +248,7 @@ const SignUp: React.FC = () => {
                     value={formData.email}
                     onChange={handleChange}
                     className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    required
                   />
                   <span className="absolute right-4 top-4">
                     <svg
@@ -253,6 +282,7 @@ const SignUp: React.FC = () => {
                     value={formData.password}
                     onChange={handleChange}
                     className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    required
                   />
                   <span className="absolute right-4 top-4">
                     <svg
@@ -286,6 +316,7 @@ const SignUp: React.FC = () => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    required
                   />
                 </div>
               </div>
@@ -318,7 +349,7 @@ const SignUp: React.FC = () => {
                         d="M19.999 10.2217C20.0111 9.53428 19.9387 8.84788 19.7834 8.17737H10.2031V11.8884H15.8266C15.7201 12.5391 15.4804 13.162 15.1219 13.7195C14.7634 14.2771 14.2935 14.7578 13.7405 15.1328L13.7209 15.2571L16.7502 17.5568L16.96 17.5774C18.8873 15.8329 19.9986 13.2661 19.9986 10.2217"
                         fill="#4285F4"
                       />
-                     <path
+                      <path
                         d="M10.2055 19.9999C12.9605 19.9999 15.2734 19.111 16.9629 17.5777L13.7429 15.1331C12.8813 15.7221 11.7248 16.1333 10.2055 16.1333C8.91513 16.1259 7.65991 15.7205 6.61791 14.9745C5.57592 14.2286 4.80007 13.1801 4.40044 11.9777L4.28085 11.9877L1.13101 14.3765L1.08984 14.4887C1.93817 16.1456 3.24007 17.5386 4.84997 18.5118C6.45987 19.4851 8.31429 20.0004 10.2059 19.9999"
                         fill="#34A853"
                       />

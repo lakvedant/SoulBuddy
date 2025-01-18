@@ -6,6 +6,7 @@ import "@/css/style.css";
 import React, { useEffect, useState } from "react";
 import Loader from "@/components/common/Loader";
 import SessionWrapper from "@/components/SessionWrapper";
+import Chatbot from "@/components/Chatbot";
 
 
 export default function RootLayout({
@@ -26,7 +27,8 @@ export default function RootLayout({
       <SessionWrapper>
         <body suppressHydrationWarning={true}>
           <div className="dark:bg-boxdark-2 dark:text-bodydark">
-            {loading ? <Loader /> : children}
+            {loading ? <Loader />  : children}
+            <Chatbot />
           </div>
         </body>
       </SessionWrapper>
