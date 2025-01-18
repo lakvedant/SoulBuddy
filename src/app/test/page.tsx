@@ -1,7 +1,16 @@
-import AstrologyChart from '@/components/Kundali';
 
-export default function KundaliPage() {
-  // Replace with actual user ID retrieval method
-  const userId = 'XbLNaC5O4WfnuCjmtv1GxkMlaoj2';
-  return <AstrologyChart userId={userId} />;
+import Navbar from "@/components/Navbar";
+import Chatbot from "@/components/Chatbot";
+import ChartPage from "@/components/Kundali";
+
+
+export default function Home() {
+  return (
+    <>
+      <ChartPage></ChartPage>
+      
+      
+      
+    </>
+  );
 }

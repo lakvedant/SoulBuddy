@@ -27,31 +27,32 @@ const EnergyCalendar = () => {
       setLoading(true);
       setError(null);
       const data = new Map<string, DayData>();
-      
+
       // Fetch last 7 days data
       for (let i = 0; i < 7; i++) {
         const date = new Date();
         date.setDate(date.getDate() - i);
         const formattedDate = formatDate(date);
-        
+
         try {
           const response = await fetchHoroscope({
             date: formattedDate,
             zodiac: parseInt(selectedZodiac),
             type: 'big',
             split: true,
-            lang: 'en'
+            lang: 'en',
           });
 
           // Safely check the response structure
-          if (response?.status === 200 && 
-              response?.response?.bot_response?.total_score?.score !== undefined &&
-              response?.response?.bot_response?.total_score?.split_response) {
-            
+          if (
+            response?.status === 200 &&
+            response?.response?.bot_response?.total_score?.score !== undefined &&
+            response?.response?.bot_response?.total_score?.split_response
+          ) {
             data.set(formattedDate, {
               date: formattedDate,
               score: response.response.bot_response.total_score.score,
-              details: response.response.bot_response.total_score.split_response
+              details: response.response.bot_response.total_score.split_response,
             });
           } else {
             console.warn(`Invalid response format for ${formattedDate}:`, response);
@@ -64,7 +65,7 @@ const EnergyCalendar = () => {
           }
         }
       }
-      
+
       setEnergyData(data);
       setLoading(false);
     };
@@ -78,19 +79,19 @@ const EnergyCalendar = () => {
   }, [energyData]);
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'bg-green-100';
-    if (score >= 60) return 'bg-green-50';
-    if (score >= 40) return 'bg-yellow-50';
-    if (score >= 20) return 'bg-orange-50';
-    return 'bg-red-50';
+    if (score >= 80) return 'bg-purple-100'; // Purple theme
+    if (score >= 60) return 'bg-purple-50';
+    if (score >= 40) return 'bg-pink-50';
+    if (score >= 20) return 'bg-red-50';
+    return 'bg-gray-50';
   };
 
   const getScoreTextColor = (score: number) => {
-    if (score >= 80) return 'text-green-600';
-    if (score >= 60) return 'text-green-500';
-    if (score >= 40) return 'text-yellow-600';
-    if (score >= 20) return 'text-orange-500';
-    return 'text-red-500';
+    if (score >= 80) return 'text-purple-600';
+    if (score >= 60) return 'text-purple-500';
+    if (score >= 40) return 'text-pink-600';
+    if (score >= 20) return 'text-red-500';
+    return 'text-gray-500';
   };
 
   const getCurrentMonthDays = (): CalendarDay[] => {
@@ -100,7 +101,7 @@ const EnergyCalendar = () => {
     const firstDay = new Date(currentYear, currentMonth, 1);
     const lastDay = new Date(currentYear, currentMonth + 1, 0);
     const days: CalendarDay[] = [];
-    
+
     // Add previous month days to complete first week
     const firstDayOfWeek = firstDay.getDay();
     for (let i = firstDayOfWeek - 1; i >= 0; i--) {
@@ -108,20 +109,20 @@ const EnergyCalendar = () => {
       days.push({
         date: formatDate(date),
         dayOfMonth: date.getDate(),
-        isCurrentMonth: false
+        isCurrentMonth: false,
       });
     }
-    
+
     // Add current month days
     for (let i = 1; i <= lastDay.getDate(); i++) {
       const date = new Date(currentYear, currentMonth, i);
       days.push({
         date: formatDate(date),
         dayOfMonth: i,
-        isCurrentMonth: true
+        isCurrentMonth: true,
       });
     }
-    
+
     return days;
   };
 
@@ -136,7 +137,7 @@ const EnergyCalendar = () => {
           ${!day.isCurrentMonth ? 'text-gray-400' : ''}`}
       >
         <span className="font-medium">{day.dayOfMonth}</span>
-        
+
         {dayData && (
           <div className="group relative">
             <div className="mt-1 flex items-center">
@@ -145,7 +146,7 @@ const EnergyCalendar = () => {
                 {dayData.score}%
               </span>
             </div>
-            
+
             <div className="invisible absolute left-0 z-50 mt-2 w-48 rounded-md bg-white p-2 text-sm shadow-lg opacity-0 transition-opacity group-hover:visible group-hover:opacity-100">
               <p className="font-medium text-gray-900">Energy Level</p>
               <p className="text-gray-600">{dayData.details}</p>
@@ -159,8 +160,12 @@ const EnergyCalendar = () => {
   return (
     <div className="mx-auto max-w-7xl">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Energy Calendar</h1>
-        {loading && <span className="text-gray-500">Loading energy data...</span>}
+        <h1 className="text-2xl font-bold text-purple-700">
+          Purple Energy Calendar
+        </h1>
+        {loading && (
+          <span className="text-gray-500">Loading energy data...</span>
+        )}
       </div>
 
       {error && (
@@ -169,10 +174,10 @@ const EnergyCalendar = () => {
         </div>
       )}
 
-      <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className="w-full max-w-full rounded-sm border border-purple-200 bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <table className="w-full">
           <thead>
-            <tr className="grid grid-cols-7 bg-primary text-white">
+            <tr className="grid grid-cols-7 bg-purple-600 text-white">
               <th className="p-2 text-center">Sun</th>
               <th className="p-2 text-center">Mon</th>
               <th className="p-2 text-center">Tue</th>
