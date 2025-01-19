@@ -23,11 +23,6 @@ export default function KundaliParent() {
           <div className="max-w-4xl mx-auto">
             <Kundali userId={userId} />
           </div>
-
-          {/* Disclaimer Section */}
-          <div className="mt-8 text-center text-sm text-purple-500/70">
-            <p>For entertainment purposes only</p>
-          </div>
         </div>
       </div>
       </DefaultLayout>
