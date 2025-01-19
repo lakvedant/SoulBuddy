@@ -1,3 +1,4 @@
+"use client"
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { MessageCircle, Send, X, Bot, User } from 'lucide-react'
