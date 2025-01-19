@@ -75,7 +75,7 @@ export default function HorizontalScroll() {
         scrollTrigger: {
           trigger: triggerRef.current,
           start: "top top",
-          end: () => `+=${(services.length - 1) * window.innerWidth}`,
+          end: () => `+=${(services.length - 1) * window.innerWidth*0.2}`,
           scrub: 0.6,
           pin: true,
         },
@@ -88,9 +88,7 @@ export default function HorizontalScroll() {
   }, []);
 
   return (
-    <section
-      className="overflow-hidden text-white bg-gradient-to-r from-purple-300 via-purple-400 to-purple-500 "
-    >
+    <section className="overflow-hidden text-white bg-gradient-to-br from-purple-800  via-purple-950 to-purple-900">
       <div ref={triggerRef}>
         <div
           ref={sectionRef}
@@ -99,7 +97,7 @@ export default function HorizontalScroll() {
           {services.map((service) => (
             <Link href={service.path} key={service.title}>
               <div
-                className="relative h-[450px] w-[400px] flex-shrink-0 rounded-2xl bg-white shadow-xl overflow-hidden group cursor-pointer"
+                className="relative h-[450px] w-[400px] flex-shrink-0 rounded-2xl bg-gradient-to-br from-purple-400 via-purple-500 to-purple-400 shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group cursor-pointer"
               >
                 {/* Lottie Animation */}
                 <div>
@@ -110,12 +108,14 @@ export default function HorizontalScroll() {
                   />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 p-6 flex flex-col justify-end text-white">
-                  <service.icon className="w-12 h-12 mb-4" />
-                  <h3 className="text-2xl font-bold mb-2">{service.title}</h3>
-                  <p className="text-sm opacity-90 mb-4">{service.description}</p>
-                  <ul className="text-xs space-y-1">
+                  <div className="flex items-center mb-10">
+                    <service.icon className="w-12 h-12 text-white" />
+                    <h3 className="ml-4 text-2xl font-bold">{service.title}</h3>
+                  </div>
+                  <p className="text-sm opacity-90 mb-8">{service.description}</p>
+                  <ul className="text-xs space-y-1 list-disc ml-4">
                     {service.benefits.map((benefit, index) => (
-                      <li key={index} className="flex items-center">
+                      <li key={index} className="flex items-center text-white">
                         <span className="mr-2">•</span>
                         {benefit}
                       </li>

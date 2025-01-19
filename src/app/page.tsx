@@ -15,7 +15,7 @@ export default function Home() {
     </main>
       <HorizontalScroll/>
       {/* <Chatbot /> */}
-      {/* <MeditationWalkthrough/> */}
+      <MeditationWalkthrough/>
       
     </>
   );
