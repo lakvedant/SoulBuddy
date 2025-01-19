@@ -69,13 +69,13 @@ export default function HorizontalScroll() {
         translateX: 0,
       },
       {
-        translateX: `-${(services.length - 1) * 100}vw`,
+        translateX: `-${(services.length - 1) * 11}vw`,
         ease: "none",
         duration: 1,
         scrollTrigger: {
           trigger: triggerRef.current,
           start: "top top",
-          end: () => `+=${(services.length - 1) * window.innerWidth*0.2}`,
+          end: () => `+=${(services.length - 1) * window.innerWidth*0.15}`,
           scrub: 0.6,
           pin: true,
         },
