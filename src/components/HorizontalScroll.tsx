@@ -18,6 +18,7 @@ type Service = {
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
   benefits: string[];
   path: string;
+  lottieSrc: string;
 };
 
 const services: Service[] = [
@@ -27,6 +28,7 @@ const services: Service[] = [
     icon: Wind,
     benefits: ["Reduce stress and anxiety", "Improve focus and concentration", "Enhance sleep quality"],
     path: "/services/breathing",
+    lottieSrc: "https://lottie.host/2f09368f-f934-4195-8ea3-e69b2b66a929/Rmlz6FMeP6.lottie",
   },
   {
     title: "Meditation Sessions",
@@ -34,20 +36,23 @@ const services: Service[] = [
     icon: Brain,
     benefits: ["Practice mindfulness", "Find inner peace", "Develop emotional balance"],
     path: "/services/meditation",
+    lottieSrc: "https://lottie.host/48c4fb5e-9760-4dda-833a-a93d2798baf1/ryH1W2AHdx.lottie",
   },
   {
-    title: "Heart Rate Training",
+    title: "Know Your Horoscope",
     description: "Learn to control and monitor your heart rate for better health",
     icon: Heart,
     benefits: ["Monitor stress levels", "Improve cardiovascular health", "Better emotional regulation"],
     path: "/services/heart-rate",
+    lottieSrc: "https://lottie.host/0137f268-134b-436c-a056-617de7654c2c/kUDmIOBdqc.lottie",
   },
   {
-    title: "Guided Journeys",
+    title: "Your Gemstones",
     description: "Take guided mental journeys for relaxation and self-discovery",
     icon: Compass,
     benefits: ["Deep relaxation", "Self-discovery", "Mental clarity"],
     path: "/services/journeys",
+    lottieSrc: "https://lottie.host/48c4fb5e-9760-4dda-833a-a93d2798baf1/ryH1W2AHdx.lottie",
   },
   {
     title: "Mood Tracking",
@@ -55,6 +60,7 @@ const services: Service[] = [
     icon: Smile,
     benefits: ["Emotional awareness", "Pattern recognition", "Better self-understanding"],
     path: "/services/mood",
+    lottieSrc: "https://lottie.host/2f09368f-f934-4195-8ea3-e69b2b66a929/Rmlz6FMeP6.lottie",
   },
 ];
 
@@ -75,7 +81,7 @@ export default function HorizontalScroll() {
         scrollTrigger: {
           trigger: triggerRef.current,
           start: "top top",
-          end: () => `+=${(services.length - 1) * window.innerWidth*0.15}`,
+          end: () => `+=${(services.length - 1) * window.innerWidth * 0.15}`,
           scrub: 0.6,
           pin: true,
         },
@@ -88,7 +94,7 @@ export default function HorizontalScroll() {
   }, []);
 
   return (
-    <section className="overflow-hidden text-white bg-gradient-to-br from-purple-800  via-purple-950 to-purple-900">
+    <section className="overflow-hidden text-white bg-gradient-to-br from-purple-800 via-purple-950 to-purple-900">
       <div ref={triggerRef}>
         <div
           ref={sectionRef}
@@ -96,27 +102,25 @@ export default function HorizontalScroll() {
         >
           {services.map((service) => (
             <Link href={service.path} key={service.title}>
-              <div
-                className="relative h-[450px] w-[400px] flex-shrink-0 rounded-2xl bg-gradient-to-br from-purple-400 via-purple-500 to-purple-400 shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group cursor-pointer"
-              >
+              <div className="relative h-[450px] w-[400px] flex-shrink-0 rounded-2xl bg-gradient-to-br from-purple-400 via-purple-500 to-purple-400 shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group cursor-pointer">
                 {/* Lottie Animation */}
-                <div>
+                <div className="relative w-full h-1/2">
                   <DotLottieReact
-                    src="https://lottie.host/48c4fb5e-9760-4dda-833a-a93d2798baf1/ryH1W2AHdx.lottie"
+                    src={service.lottieSrc}
                     loop
                     autoplay
+                    className="absolute inset-0"
                   />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 p-6 flex flex-col justify-end text-white">
-                  <div className="flex items-center mb-10">
-                    <service.icon className="w-12 h-12 text-white" />
-                    <h3 className="ml-4 text-2xl font-bold">{service.title}</h3>
+                  <div className="flex items-center mb-6">
+                    <service.icon className="w-10 h-10 text-white" />
+                    <h3 className="ml-4 text-xl font-bold">{service.title}</h3>
                   </div>
-                  <p className="text-sm opacity-90 mb-8">{service.description}</p>
+                  <p className="text-sm opacity-90 mb-4">{service.description}</p>
                   <ul className="text-xs space-y-1 list-disc ml-4">
                     {service.benefits.map((benefit, index) => (
-                      <li key={index} className="flex items-center text-white">
-                        <span className="mr-2">•</span>
+                      <li key={index} className="text-white">
                         {benefit}
                       </li>
                     ))}
