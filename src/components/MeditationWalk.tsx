@@ -14,16 +14,19 @@ import * as React from 'react'
 import * as SwitchPrimitives from '@radix-ui/react-switch'
 import * as LabelPrimitives from '@radix-ui/react-label'
 import { cn } from '@/lib/utils'
-import { Pause, Play, SkipForward, Moon, Sun, Cloud, Focus } from 'lucide-react'
+import { Pause, Play, SkipForward, Moon, Sun, Cloud, Focus, Music2 } from 'lucide-react'
+import { MeditationAudio } from './meditation-audio' // Updated import statement
 
-// Types defined in the same file
+// Updated types to include music selection
 type MeditationGoal = 'calm' | 'visualize' | 'manifest' | 'focus'
 type MeditationDuration = 5 | 10 | 15
+type MusicTrack = 'cosmic' | 'nature' | 'crystal'
 
 interface MeditationSettings {
   goal: MeditationGoal
   duration: MeditationDuration
   backgroundSound?: string
+  musicTrack: MusicTrack
   skipIntro?: boolean
 }
 
@@ -33,7 +36,26 @@ interface MeditationProgress {
   currentTime: number
 }
 
-// Switch Component with updated styling
+// Music tracks data
+const musicTracks = {
+  5: {
+    cosmic: '/meditation-sounds/cosmic-5min.mp3',
+    nature: '/meditation-sounds/5 Minute Music Meditation  5 Minutes to Calm  Scenic Waterfall and Nature Sounds.mp3',
+    crystal: '/meditation-sounds/crystal-5min.mp3',
+  },
+  10: {
+    cosmic: '/meditation-sounds/cosmic-10min.mp3',
+    nature: '/meditation-sounds/nature-10min.mp3',
+    crystal: '/meditation-sounds/Guided 10 Minute Mountain Meditation _ Become the Mountain [h-orIuh4FhQ].mp3',
+  },
+  15: {
+    cosmic: '/meditation-sounds/cosmic-15min.mp3',
+    nature: '/meditation-sounds/nature-15min.mp3',
+    crystal: '/meditation-sounds/crystal-15min.mp3',
+  },
+}
+
+// Components remain the same as before...
 const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>
@@ -53,9 +75,7 @@ const Switch = React.forwardRef<
     />
   </SwitchPrimitives.Root>
 ))
-Switch.displayName = SwitchPrimitives.Root.displayName
 
-// Label Component with updated styling
 const Label = React.forwardRef<
   React.ElementRef<typeof LabelPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof LabelPrimitives.Root>
@@ -69,9 +89,7 @@ const Label = React.forwardRef<
     {...props}
   />
 ))
-Label.displayName = LabelPrimitives.Root.displayName
 
-// Progress Component with updated styling
 const Progress = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & { value?: number }
@@ -85,17 +103,17 @@ const Progress = React.forwardRef<
     {...props}
   >
     <div
-      className="h-full w-full flex-1 bg-gradient-to-r from-purple-600 to-purple-400 transition-all duration-300 ease-in-out"
+      className="h-full w-full flex-1 bg-gradient-to-r from-fuchsia-500 via-purple-500 to-indigo-500 transition-all duration-300 ease-in-out"
       style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
     />
   </div>
 ))
-Progress.displayName = "Progress"
 
 export default function MeditationWalkthrough() {
   const [settings, setSettings] = useState<MeditationSettings>({
     goal: 'calm',
     duration: 5,
+    musicTrack: 'cosmic',
     skipIntro: false,
   })
 
@@ -128,20 +146,11 @@ export default function MeditationWalkthrough() {
     setProgress(prev => ({ ...prev, isPlaying: !prev.isPlaying }))
   }
 
-  const getGoalIcon = (goal: MeditationGoal) => {
-    switch (goal) {
-      case 'calm': return <Moon className="h-6 w-6" />
-      case 'visualize': return <Sun className="h-6 w-6" />
-      case 'manifest': return <Cloud className="h-6 w-6" />
-      case 'focus': return <Focus className="h-6 w-6" />
-    }
-  }
-
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-[#1a103d] to-[#2d1b69] p-6 md:p-12">
-      <Card className="mx-auto max-w-4xl bg-black/20 backdrop-blur-lg border-purple-500/20">
+    <div className="min-h-screen w-full bg-gradient-to-br from-[#1a103d] via-[#2d1b69] to-[#1a103d] p-6 md:p-12">
+      <Card className="mx-auto max-w-4xl bg-black/20 backdrop-blur-lg border-purple-500/20 shadow-2xl shadow-purple-500/20">
         <CardHeader className="space-y-4">
-          <CardTitle className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-white to-purple-300 bg-clip-text text-transparent">
+          <CardTitle className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-fuchsia-300 via-white to-purple-300 bg-clip-text text-transparent">
             Cosmic Meditation Journey
           </CardTitle>
         </CardHeader>
@@ -152,33 +161,36 @@ export default function MeditationWalkthrough() {
                 <Label htmlFor="goal" className="text-2xl">Choose your meditation goal</Label>
                 <Select
                   value={settings.goal}
-                  onValueChange={(value) => setSettings({ ...settings, goal: value as any })}
+                  onValueChange={(value) => setSettings({ ...settings, goal: value as MeditationGoal })}
                 >
-                  <SelectTrigger id="goal" className="h-14 text-lg bg-purple-900/20 border-purple-500/30">
+                  <SelectTrigger 
+                    id="goal" 
+                    className="h-14 text-lg bg-gradient-to-r from-purple-900/40 to-fuchsia-900/40 border-purple-500/30 text-white hover:from-purple-800/40 hover:to-fuchsia-800/40 transition-all duration-300"
+                  >
                     <SelectValue placeholder="Select a goal" />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#1a103d] border-purple-500/30">
-                    <SelectItem value="calm" className="text-lg">
+                  <SelectContent className="bg-gradient-to-br from-purple-900/95 to-fuchsia-900/95 border-purple-500/30 text-white backdrop-blur-xl">
+                    <SelectItem value="calm" className="text-lg focus:bg-white/10 cursor-pointer">
                       <div className="flex items-center gap-2">
-                        <Moon className="h-5 w-5" />
+                        <Moon className="h-5 w-5 text-purple-300" />
                         Calm the mind
                       </div>
                     </SelectItem>
-                    <SelectItem value="visualize" className="text-lg">
+                    <SelectItem value="visualize" className="text-lg focus:bg-white/10 cursor-pointer">
                       <div className="flex items-center gap-2">
-                        <Sun className="h-5 w-5" />
+                        <Sun className="h-5 w-5 text-yellow-300" />
                         Visualization
                       </div>
                     </SelectItem>
-                    <SelectItem value="manifest" className="text-lg">
+                    <SelectItem value="manifest" className="text-lg focus:bg-white/10 cursor-pointer">
                       <div className="flex items-center gap-2">
-                        <Cloud className="h-5 w-5" />
+                        <Cloud className="h-5 w-5 text-blue-300" />
                         Manifestation
                       </div>
                     </SelectItem>
-                    <SelectItem value="focus" className="text-lg">
+                    <SelectItem value="focus" className="text-lg focus:bg-white/10 cursor-pointer">
                       <div className="flex items-center gap-2">
-                        <Focus className="h-5 w-5" />
+                        <Focus className="h-5 w-5 text-green-300" />
                         Improve focus
                       </div>
                     </SelectItem>
@@ -190,38 +202,58 @@ export default function MeditationWalkthrough() {
                 <Label htmlFor="duration" className="text-2xl">Duration (minutes)</Label>
                 <Select
                   value={settings.duration.toString()}
-                  onValueChange={(value) => setSettings({ ...settings, duration: parseInt(value) as any })}
+                  onValueChange={(value) => setSettings({ ...settings, duration: parseInt(value) as MeditationDuration })}
                 >
-                  <SelectTrigger id="duration" className="h-14 text-lg bg-purple-900/20 border-purple-500/30">
+                  <SelectTrigger 
+                    id="duration" 
+                    className="h-14 text-lg bg-gradient-to-r from-purple-900/40 to-fuchsia-900/40 border-purple-500/30 text-white hover:from-purple-800/40 hover:to-fuchsia-800/40 transition-all duration-300"
+                  >
                     <SelectValue placeholder="Select duration" />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#1a103d] border-purple-500/30">
-                    <SelectItem value="5" className="text-lg">5 minutes</SelectItem>
-                    <SelectItem value="10" className="text-lg">10 minutes</SelectItem>
-                    <SelectItem value="15" className="text-lg">15 minutes</SelectItem>
+                  <SelectContent className="bg-gradient-to-br from-purple-900/95 to-fuchsia-900/95 border-purple-500/30 text-white backdrop-blur-xl">
+                    <SelectItem value="5" className="text-lg focus:bg-white/10 cursor-pointer">5 minutes</SelectItem>
+                    <SelectItem value="10" className="text-lg focus:bg-white/10 cursor-pointer">10 minutes</SelectItem>
+                    <SelectItem value="15" className="text-lg focus:bg-white/10 cursor-pointer">15 minutes</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-4">
-                <Label htmlFor="sound" className="text-2xl">Background Sound</Label>
+                <Label htmlFor="music" className="text-2xl">Choose Your Music</Label>
                 <Select
-                  value={settings.backgroundSound}
-                  onValueChange={(value) => setSettings({ ...settings, backgroundSound: value })}
+                  value={settings.musicTrack}
+                  onValueChange={(value) => setSettings({ ...settings, musicTrack: value as MusicTrack })}
                 >
-                  <SelectTrigger id="sound" className="h-14 text-lg bg-purple-900/20 border-purple-500/30">
-                    <SelectValue placeholder="Choose background sound" />
+                  <SelectTrigger 
+                    id="music" 
+                    className="h-14 text-lg bg-gradient-to-r from-purple-900/40 to-fuchsia-900/40 border-purple-500/30 text-white hover:from-purple-800/40 hover:to-fuchsia-800/40 transition-all duration-300"
+                  >
+                    <SelectValue placeholder="Select music" />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#1a103d] border-purple-500/30">
-                    <SelectItem value="rain" className="text-lg">Cosmic Rain</SelectItem>
-                    <SelectItem value="forest" className="text-lg">Mystical Forest</SelectItem>
-                    <SelectItem value="waves" className="text-lg">Celestial Waves</SelectItem>
-                    <SelectItem value="none" className="text-lg">No Sound</SelectItem>
+                  <SelectContent className="bg-gradient-to-br from-purple-900/95 to-fuchsia-900/95 border-purple-500/30 text-white backdrop-blur-xl">
+                    <SelectItem value="cosmic" className="text-lg focus:bg-white/10 cursor-pointer">
+                      <div className="flex items-center gap-2">
+                        <Music2 className="h-5 w-5 text-purple-300" />
+                        Cosmic Harmony
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="nature" className="text-lg focus:bg-white/10 cursor-pointer">
+                      <div className="flex items-center gap-2">
+                        <Music2 className="h-5 w-5 text-green-300" />
+                        Nature's Symphony
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="crystal" className="text-lg focus:bg-white/10 cursor-pointer">
+                      <div className="flex items-center gap-2">
+                        <Music2 className="h-5 w-5 text-blue-300" />
+                        Crystal Resonance
+                      </div>
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="flex items-center justify-between space-x-4 bg-purple-900/20 p-6 rounded-xl">
+              <div className="flex items-center justify-between space-x-4 bg-gradient-to-r from-purple-900/20 to-fuchsia-900/20 p-6 rounded-xl border border-purple-500/20 backdrop-blur-sm">
                 <Label htmlFor="skip-intro" className="text-xl">Skip introduction</Label>
                 <Switch
                   id="skip-intro"
@@ -232,7 +264,7 @@ export default function MeditationWalkthrough() {
 
               <Button 
                 onClick={handleStart} 
-                className="w-full h-16 text-xl bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 transition-all duration-300"
+                className="w-full h-16 text-xl bg-gradient-to-r from-purple-600 via-fuchsia-500 to-purple-500 hover:from-purple-500 hover:via-fuchsia-400 hover:to-purple-400 transition-all duration-300 shadow-lg shadow-purple-500/20"
               >
                 Begin Your Journey
               </Button>
@@ -240,9 +272,8 @@ export default function MeditationWalkthrough() {
           ) : (
             <div className="space-y-8">
               <div className="text-center space-y-4">
-                <div className="flex items-center justify-center gap-3 text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-white to-purple-300 bg-clip-text text-transparent">
-                  {getGoalIcon(settings.goal)}
-                  <h3>
+                <div className="flex items-center justify-center gap-3 text-3xl md:text-4xl font-bold mb-2">
+                  <h3 className="bg-gradient-to-r from-fuchsia-300 via-white to-purple-300 bg-clip-text text-transparent">
                     {settings.goal === 'calm' && 'Finding Inner Peace'}
                     {settings.goal === 'visualize' && 'Creative Visualization'}
                     {settings.goal === 'manifest' && 'Manifestation Journey'}
@@ -264,7 +295,7 @@ export default function MeditationWalkthrough() {
                   variant="outline" 
                   size="icon" 
                   onClick={togglePlayPause}
-                  className="w-16 h-16 rounded-full border-2 border-purple-500/50 bg-purple-900/30 hover:bg-purple-800/50 transition-all duration-300"
+                  className="w-16 h-16 rounded-full border-2 border-purple-500/50 bg-gradient-to-br from-purple-900/30 to-fuchsia-900/30 hover:from-purple-800/50 hover:to-fuchsia-800/50 transition-all duration-300"
                 >
                   {progress.isPlaying ? 
                     <Pause className="h-8 w-8 text-purple-200" /> : 
@@ -274,7 +305,7 @@ export default function MeditationWalkthrough() {
                 <Button 
                   variant="outline" 
                   size="icon"
-                  className="w-16 h-16 rounded-full border-2 border-purple-500/50 bg-purple-900/30 hover:bg-purple-800/50 transition-all duration-300"
+                  className="w-16 h-16 rounded-full border-2 border-purple-500/50 bg-gradient-to-br from-purple-900/30 to-fuchsia-900/30 hover:from-purple-800/50 hover:to-fuchsia-800/50 transition-all duration-300"
                 >
                   <SkipForward className="h-8 w-8 text-purple-200" />
                 </Button>
@@ -284,6 +315,11 @@ export default function MeditationWalkthrough() {
                 <p className="text-xl text-purple-200/80">Current Streak: 3 days</p>
                 <p className="text-lg text-purple-300/60">Total Sessions: 12</p>
               </div>
+
+              <MeditationAudio
+                isPlaying={progress.isPlaying}
+                audioSrc={musicTracks[settings.duration][settings.musicTrack]}
+              />
             </div>
           )}
         </CardContent>

@@ -75,7 +75,7 @@ export default function HorizontalScroll() {
         scrollTrigger: {
           trigger: triggerRef.current,
           start: "top top",
-          end: () => `+=${(services.length - 1) * window.innerWidth*0.2}`,
+          end: () => `+=${(services.length - 1) * window.innerWidth*0.15}`,
           scrub: 0.6,
           pin: true,
         },

@@ -3,12 +3,12 @@
 import { useEffect, useRef } from 'react'
 
 interface MeditationAudioProps {
-  backgroundSound?: string
+  audioSrc: string
   isPlaying: boolean
   volume?: number
 }
 
-export function MeditationAudio({ backgroundSound, isPlaying, volume = 0.5 }: MeditationAudioProps) {
+export function MeditationAudio({ audioSrc, isPlaying, volume = 0.5 }: MeditationAudioProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => {
@@ -26,12 +26,10 @@ export function MeditationAudio({ backgroundSound, isPlaying, volume = 0.5 }: Me
     audioRef.current.volume = volume
   }, [volume])
 
-  if (!backgroundSound || backgroundSound === 'none') return null
-
   return (
     <audio
       ref={audioRef}
-      src={`/meditation-sounds/${backgroundSound}.mp3`}
+      src={audioSrc}
       loop
       className="hidden"
     />
