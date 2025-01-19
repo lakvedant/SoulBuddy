@@ -15,7 +15,6 @@ import * as SwitchPrimitives from '@radix-ui/react-switch'
 import * as LabelPrimitives from '@radix-ui/react-label'
 import { cn } from '@/lib/utils'
 import { Pause, Play, SkipForward, Moon, Sun, Cloud, Focus, Music2 } from 'lucide-react'
-import { MeditationAudio } from './meditation-audio' // Updated import statement
 
 // Updated types to include music selection
 type MeditationGoal = 'calm' | 'visualize' | 'manifest' | 'focus'
@@ -316,10 +315,6 @@ export default function MeditationWalkthrough() {
                 <p className="text-lg text-purple-300/60">Total Sessions: 12</p>
               </div>
 
-              <MeditationAudio
-                isPlaying={progress.isPlaying}
-                audioSrc={musicTracks[settings.duration][settings.musicTrack]}
-              />
             </div>
           )}
         </CardContent>
