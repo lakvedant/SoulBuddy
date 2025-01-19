@@ -8,7 +8,6 @@ export async function POST(request: Request) {
 
     console.log('Astra DB Endpoint:', astraEndpoint);
 
-    // Include date_of_birth in requestBody
     const requestBody = {
       user_id: userData.user_id,
       email: userData.email,
@@ -80,11 +79,8 @@ export async function GET(request: Request) {
     }
 
     const data = await response.json();
-    
-    // Add logging to see what data we're getting
     console.log('Data from Astra DB:', data);
 
-    // Make sure we're returning date_of_birth in the response
     return NextResponse.json({
       ...data,
       date_of_birth: data.date_of_birth || null
