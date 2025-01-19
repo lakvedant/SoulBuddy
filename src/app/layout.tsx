@@ -26,7 +26,7 @@ export default function RootLayout({
         <body suppressHydrationWarning={true}>
           <div className="dark:bg-boxdark-2 dark:text-bodydark">
             {loading ? <Loader />  : children}
-            {/* <Chatbot /> */}
+            <Chatbot />
           </div>
         </body>
     </html>

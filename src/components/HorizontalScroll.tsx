@@ -26,7 +26,7 @@ const services: Service[] = [
     description: "Master various breathing techniques to reduce stress and anxiety",
     icon: Wind,
     benefits: ["Reduce stress and anxiety", "Improve focus and concentration", "Enhance sleep quality"],
-    path: "/services/breathing",
+    path: "/breathe2",
   },
   {
     title: "Meditation Sessions",
@@ -69,7 +69,7 @@ export default function HorizontalScroll() {
         translateX: 0,
       },
       {
-        translateX: `-${(services.length - 1) * 100}vw`,
+        translateX: `-${(services.length - 1) * 11}vw`,
         ease: "none",
         duration: 1,
         scrollTrigger: {

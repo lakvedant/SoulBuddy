@@ -69,7 +69,7 @@ export default function Navbar() {
         {/* Menu Items */}
         <ul className="flex items-center space-x-8">
           <li>
-            <Link href="/dashboard" className="text-gray-300 hover:text-white transition-colors">
+            <Link href="/kundali" className="text-gray-300 hover:text-white transition-colors">
               Dashboard
             </Link>
           </li>
