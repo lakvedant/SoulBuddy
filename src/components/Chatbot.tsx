@@ -1,5 +1,4 @@
-'use client'
-
+"use client"
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { MessageCircle, Send, X, Bot, User } from 'lucide-react'
@@ -24,21 +23,21 @@ const Button = ({ variant, size, ...props }: ButtonProps) => (
 
 // Typing animation component
 const TypingIndicator = () => (
-  <div className="flex space-x-2 p-3 bg-gray-100 rounded-lg items-center">
-    <Bot className="w-5 h-5 text-gray-500" />
+  <div className="flex space-x-2 p-3 bg-purple-100 rounded-lg items-center">
+    <Bot className="w-5 h-5 text-purple-500" />
     <div className="flex space-x-1">
       <motion.div
-        className="w-2 h-2 bg-gray-400 rounded-full"
+        className="w-2 h-2 bg-purple-400 rounded-full"
         animate={{ y: [0, -5, 0] }}
         transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
       />
       <motion.div
-        className="w-2 h-2 bg-gray-400 rounded-full"
+        className="w-2 h-2 bg-purple-400 rounded-full"
         animate={{ y: [0, -5, 0] }}
         transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse", delay: 0.2 }}
       />
       <motion.div
-        className="w-2 h-2 bg-gray-400 rounded-full"
+        className="w-2 h-2 bg-purple-400 rounded-full"
         animate={{ y: [0, -5, 0] }}
         transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse", delay: 0.4 }}
       />
@@ -53,11 +52,11 @@ const ChatMessage = ({ message }: { message: Message }) => {
   return (
     <div className={`mb-4 ${isUser ? 'text-right' : 'text-left'}`}>
       <div className={`flex items-center gap-2 mb-1 ${isUser ? 'justify-end' : 'justify-start'}`}>
-        {!isUser && <Bot className="w-4 h-4 text-blue-500" />}
-        <span className="text-sm text-gray-500">
+        {!isUser && <Bot className="w-4 h-4 text-purple-500" />}
+        <span className="text-sm text-purple-500">
           {isUser ? 'You' : 'Bot'}
         </span>
-        {isUser && <User className="w-4 h-4 text-blue-500" />}
+        {isUser && <User className="w-4 h-4 text-purple-500" />}
       </div>
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -67,8 +66,8 @@ const ChatMessage = ({ message }: { message: Message }) => {
         <span
           className={`inline-block p-3 rounded-lg ${
             isUser
-              ? 'bg-blue-500 text-white rounded-tr-none'
-              : 'bg-gray-100 text-gray-800 rounded-tl-none'
+              ? 'bg-purple-500 text-white rounded-tr-none'
+              : 'bg-purple-100 text-purple-800 rounded-tl-none'
           }`}
         >
           {message.content}
@@ -150,7 +149,7 @@ export default function Chatbot() {
       <Button
         variant="default"
         size="lg"
-        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full shadow-lg flex items-center justify-center hover:from-blue-700 hover:to-blue-800 transition-all duration-200 z-50"
+        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-full shadow-lg flex items-center justify-center hover:from-purple-700 hover:to-purple-800 transition-all duration-200 z-50"
         onClick={() => setIsOpen(prev => !prev)}
         aria-label={isOpen ? "Close chat" : "Open chat"}
       >
@@ -168,11 +167,11 @@ export default function Chatbot() {
           >
             <div className="flex justify-between items-center p-4 border-b bg-white">
               <div className="flex items-center gap-2">
-                <Bot className="w-5 h-5 text-blue-500" />
-                <h2 className="text-lg font-semibold">Chat Assistant</h2>
+                <Bot className="w-5 h-5 text-purple-500" />
+                <h2 className="text-lg font-semibold text-purple-600">Chat Assistant</h2>
               </div>
               <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
-                <X className="w-4 h-4" />
+                <X className="w-4 h-4 text-purple-600" />
               </Button>
             </div>
 
@@ -199,7 +198,7 @@ export default function Chatbot() {
                   variant="default" 
                   size="icon"
                   disabled={isLoading}
-                  className="bg-blue-500 hover:bg-blue-600"
+                  className="bg-purple-500 hover:bg-purple-600"
                 >
                   <Send className="w-4 h-4" />
                 </Button>
