@@ -3,56 +3,58 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "next/image";
+import { Wind, Brain, Heart, Compass, Smile } from "lucide-react";
+import Link from "next/link";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 // Register ScrollTrigger with GSAP
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-interface Card {
-  id: number;
+type Service = {
   title: string;
   description: string;
-  image: string;
-}
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
+  benefits: string[];
+  path: string;
+};
 
-const cards: Card[] = [
+const services: Service[] = [
   {
-    id: 1,
-    title: "Nature's Beauty",
-    description: "Explore the wonders of nature",
-    image: "/images/hero.svg",
+    title: "Breathing Exercises",
+    description: "Master various breathing techniques to reduce stress and anxiety",
+    icon: Wind,
+    benefits: ["Reduce stress and anxiety", "Improve focus and concentration", "Enhance sleep quality"],
+    path: "/services/breathing",
   },
   {
-    id: 2,
-    title: "Mountain Vista",
-    description: "Majestic mountain landscapes",
-    image: "/images/hero.svg",
+    title: "Meditation Sessions",
+    description: "Guided meditation sessions for inner peace and mindfulness",
+    icon: Brain,
+    benefits: ["Practice mindfulness", "Find inner peace", "Develop emotional balance"],
+    path: "/services/meditation",
   },
   {
-    id: 3,
-    title: "Forest Dreams",
-    description: "Deep in the mystical forest",
-    image: "/images/hero.svg",
+    title: "Heart Rate Training",
+    description: "Learn to control and monitor your heart rate for better health",
+    icon: Heart,
+    benefits: ["Monitor stress levels", "Improve cardiovascular health", "Better emotional regulation"],
+    path: "/services/heart-rate",
   },
   {
-    id: 4,
-    title: "Ocean Waves",
-    description: "Serene ocean views",
-    image: "/images/hero.svg",
+    title: "Guided Journeys",
+    description: "Take guided mental journeys for relaxation and self-discovery",
+    icon: Compass,
+    benefits: ["Deep relaxation", "Self-discovery", "Mental clarity"],
+    path: "/services/journeys",
   },
   {
-    id: 5,
-    title: "Desert Sands",
-    description: "Endless desert horizons",
-    image: "/images/hero.svg",
-  },
-  {
-    id: 6,
-    title: "Sunset Glory",
-    description: "Beautiful sunset moments",
-    image: "/images/hero.svg",
+    title: "Mood Tracking",
+    description: "Track and understand your emotional patterns",
+    icon: Smile,
+    benefits: ["Emotional awareness", "Pattern recognition", "Better self-understanding"],
+    path: "/services/mood",
   },
 ];
 
@@ -67,13 +69,13 @@ export default function HorizontalScroll() {
         translateX: 0,
       },
       {
-        translateX: "-300vw",
+        translateX: `-${(services.length - 1) * 100}vw`,
         ease: "none",
         duration: 1,
         scrollTrigger: {
           trigger: triggerRef.current,
           start: "top top",
-          end: "2000 top",
+          end: () => `+=${(services.length - 1) * window.innerWidth}`,
           scrub: 0.6,
           pin: true,
         },
@@ -86,30 +88,42 @@ export default function HorizontalScroll() {
   }, []);
 
   return (
-    <section className="overflow-hidden">
+    <section
+      className="overflow-hidden text-white bg-gradient-to-r from-purple-300 via-purple-400 to-purple-500 "
+    >
       <div ref={triggerRef}>
         <div
           ref={sectionRef}
           className="relative flex h-screen items-center gap-8 px-8"
         >
-          {cards.map((card) => (
-            <div
-              key={card.id}
-              className="relative h-[450px] w-[400px] flex-shrink-0 rounded-2xl bg-white shadow-xl overflow-hidden group"
-            >
-              <Image
-                src={card.image}
-                alt={card.title}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60">
-                <div className="absolute bottom-0 p-6 text-white">
-                  <h3 className="text-2xl font-bold mb-2">{card.title}</h3>
-                  <p className="text-sm opacity-90">{card.description}</p>
+          {services.map((service) => (
+            <Link href={service.path} key={service.title}>
+              <div
+                className="relative h-[450px] w-[400px] flex-shrink-0 rounded-2xl bg-white shadow-xl overflow-hidden group cursor-pointer"
+              >
+                {/* Lottie Animation */}
+                <div>
+                  <DotLottieReact
+                    src="https://lottie.host/48c4fb5e-9760-4dda-833a-a93d2798baf1/ryH1W2AHdx.lottie"
+                    loop
+                    autoplay
+                  />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 p-6 flex flex-col justify-end text-white">
+                  <service.icon className="w-12 h-12 mb-4" />
+                  <h3 className="text-2xl font-bold mb-2">{service.title}</h3>
+                  <p className="text-sm opacity-90 mb-4">{service.description}</p>
+                  <ul className="text-xs space-y-1">
+                    {service.benefits.map((benefit, index) => (
+                      <li key={index} className="flex items-center">
+                        <span className="mr-2">•</span>
+                        {benefit}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
