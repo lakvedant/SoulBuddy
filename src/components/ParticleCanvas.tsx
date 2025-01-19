@@ -80,7 +80,7 @@ export default function ParticleCanvas() {
     const handleMouseMove = (e: MouseEvent) => {
       mouseRef.current = { x: e.clientX, y: e.clientY }
     }
-
+    
     const handleClick = (e: MouseEvent) => {
       // Create burst effect
       const burstParticles = 20
