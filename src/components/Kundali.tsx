@@ -1,65 +1,96 @@
-// app/components/Kundali.tsx
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type FC, JSX } from 'react';
 import { Loader2 } from 'lucide-react';
 
 interface UserData {
-  dob: string;
-  name: string;
+  full_name: string;
+  date_of_birth: string;
+  time_of_birth?: string;
+  latitude?: string;
+  longitude?: string;
+  timezone?: number;
 }
 
-const Kundali = () => {
+interface KundaliProps {
+  userId: string;
+}
+
+// Default values if data fetch fails
+const DEFAULT_USER_DATA: UserData = {
+  full_name: "User",
+  date_of_birth: "2000-01-01",
+  time_of_birth: "12:00",
+  latitude: "28.7041",
+  longitude: "77.1025",
+  timezone: 5.5
+};
+
+const Kundali: FC<KundaliProps> = ({ userId }): JSX.Element => {
   const [chartSvg, setChartSvg] = useState<string>('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const generateChart = async (date: string = '21/01/2022') => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const params = {
-        api_key: 'f739c0ce-cbd1-54e4-82cb-f41a5c8db4ea',
-        dob: date,
-        tob: "02:09",
-        lat: "34.67",
-        lon: "45.86",
-        tz: "5.5",
-        div: "D1",
-        style: "north",
-        color: "#9d00ff",
-        lang: "en"
-      };
-
-      const queryString = new URLSearchParams(params).toString();
-      const response = await fetch(
-        `https://api.vedicastroapi.com/v3-json/horoscope/chart-image?${queryString}`
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to generate chart');
-      }
-
-      const chartData = await response.text();
-      
-      // Enhance SVG with styles
-      const enhancedSvg = enhanceSvgWithStyles(chartData);
-      setChartSvg(enhancedSvg);
-
-    } catch (error) {
-      console.error('Error:', error);
-      setError(error instanceof Error ? error.message : 'An error occurred');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [userData, setUserData] = useState<UserData>(DEFAULT_USER_DATA);
 
   useEffect(() => {
-    generateChart();
-  }, []);
+    const generateChart = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-  const enhanceSvgWithStyles = (originalSvg: string) => {
+        // Fetch user data
+        const userResponse = await fetch(`/api/users?userId=${userId}`);
+        if (userResponse.ok) {
+          const fetchedUserData = await userResponse.json();
+          // Merge with defaults for any missing values
+          setUserData({
+            ...DEFAULT_USER_DATA,
+            ...fetchedUserData
+          });
+        }
+
+        // Use userData (either fetched or default) to generate chart
+        const birthDate = new Date(userData.date_of_birth);
+        const formattedDate = `${birthDate.getDate().toString().padStart(2, '0')}/${(birthDate.getMonth() + 1).toString().padStart(2, '0')}/${birthDate.getFullYear()}`;
+
+        const params = {
+          api_key: 'f739c0ce-cbd1-54e4-82cb-f41a5c8db4ea',
+          dob: formattedDate,
+          tob: userData.time_of_birth || '',
+          lat: userData.latitude || '',
+          lon: userData.longitude || '',
+          tz: userData.timezone?.toString() || '',
+          div: 'D1',
+          style: 'north',
+          color: '#9d00ff',
+          lang: 'en'
+        };
+
+        const queryString = new URLSearchParams(params).toString();
+        const response = await fetch(
+          `https://api.vedicastroapi.com/v3-json/horoscope/chart-image?${queryString}`
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to generate chart');
+        }
+
+        const chartData = await response.text();
+        const enhancedSvg = enhanceSvgWithStyles(chartData);
+        setChartSvg(enhancedSvg);
+
+      } catch (error) {
+        console.error('Error:', error);
+        setError(error instanceof Error ? error.message : 'An error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    generateChart();
+  }, [userId, userData.date_of_birth]);
+
+  const enhanceSvgWithStyles = (originalSvg: string): string => {
     const baseStyles = `
       .chart-container {
         background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(147,51,234,0.05) 100%);
@@ -105,7 +136,6 @@ const Kundali = () => {
         font-weight: 700;
         fill: #4c1d95;
         transition: all 0.2s ease-out;
-        filter: drop-shadow(0px 1px 1px rgba(76, 29, 149, 0.1));
         pointer-events: none;
       }
 
@@ -189,9 +219,10 @@ const Kundali = () => {
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100 p-4">
       <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl shadow-purple-200/50 p-8 max-w-3xl w-full">
         <h1 className="text-4xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-purple-900">
-          Kundali Chart
+         Kundali
         </h1>
-        
+
+
         {error && (
           <div className="text-red-500 text-center mb-4 p-4 bg-red-50 rounded-lg">
             <p className="font-medium">Error loading chart</p>
@@ -212,7 +243,11 @@ const Kundali = () => {
                 __html: chartSvg.replace(/[\n\r]/g, '').trim()
               }}
             />
-          ) : null}
+          ) : (
+            <div className="flex justify-center items-center aspect-square bg-purple-50/50 rounded-xl">
+              <p className="text-purple-700">No chart data available</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
